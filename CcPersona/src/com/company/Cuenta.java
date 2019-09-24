@@ -3,23 +3,23 @@ package com.company;
 public class Cuenta
 {
     //Atributos
-    private int numeroCuenta;
+    private String numeroCuenta;
     private int saldo;
 
     //Constructores
-    public Cuenta(int numeroCuenta, int saldo)
+    public Cuenta(String numeroCuenta, int saldo)
     {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
     }
 
     //Getter && Setter
-    public int getNumeroCuenta()
+    public String getNumeroCuenta()
     {
         return numeroCuenta;
     }
 
-    public void setNumeroCuenta(int numeroCuenta)
+    public void setNumeroCuenta(String numeroCuenta)
     {
         this.numeroCuenta = numeroCuenta;
     }

@@ -2,15 +2,15 @@ package com.company;
 
 import java.util.ArrayList;
 
-public abstract class Persona implements IPersona
+public class Persona
 {
     //Atributos
-    private int dni;
-    private ArrayList<Cuenta> arrayCuentas;
+    private String dni;
+    private ArrayList<Cuenta> arrayCuentas = new ArrayList<Cuenta>();
     private boolean moroso = false;
 
     //Constructores
-    public Persona(int dni, ArrayList<Cuenta> arrayCuentas, boolean moroso)
+    public Persona(String dni)
     {
         this.dni = dni;
         this.arrayCuentas = arrayCuentas;
@@ -18,12 +18,12 @@ public abstract class Persona implements IPersona
     }
 
     //Getter && Setter
-    public int getDni()
+    public String getDni()
     {
         return dni;
     }
 
-    public void setDni(int dni)
+    public void setDni(String dni)
     {
         this.dni = dni;
     }
@@ -31,8 +31,13 @@ public abstract class Persona implements IPersona
     public boolean isMoroso()
     {
         //Buscamos en array cuentas si tiene alguna en negativo ( moroso = true )
-
-
+        for (int i = 0; i < this.arrayCuentas.size(); i++)
+        {
+            if(this.arrayCuentas.get(i).getSaldo() < 0)
+            {
+                setMoroso(true);
+            }
+        }
         return moroso;
     }
 
@@ -41,8 +46,7 @@ public abstract class Persona implements IPersona
         this.moroso = moroso;
     }
 
-    @Override
-    public void addCuenta(Cuenta cuenta)
+    public void addCuenta(Cuenta cuenta) throws Exception
     {
         //Nota: solo se pueden añadir hasta 3 cuentas
 
@@ -58,6 +62,63 @@ public abstract class Persona implements IPersona
                 MisExcepciones e = new MisExcepciones();
                 e.getMessage();
             }
+        }
+    }
+
+    public void delCuenta(Cuenta cuenta) throws Exception
+    {
+        if(this.arrayCuentas.contains(cuenta))
+        {
+            arrayCuentas.remove(cuenta);
+        }
+    }
+
+    public String consultaCuenta(Cuenta cuenta) throws Exception
+    {
+        String res = "";
+
+        if(this.arrayCuentas.contains(cuenta))
+        {
+            res = cuenta.toString();
+        }
+
+        return res;
+    }
+
+    public void recibeAbonos(int abonos, Cuenta cuenta) throws Exception
+    {
+        //int saldo = cuenta.getSaldo();
+        int saldo = 0;
+
+        //Comprobamos que exista la cuenta
+        if(this.arrayCuentas.contains(cuenta))
+        {
+            //Guardo el saldo actual
+            saldo = cuenta.getSaldo();
+            //Sumamos el abono al saldo
+            saldo = saldo + abonos;
+
+            //Establecemos nuevo saldo
+            cuenta.setSaldo(saldo);
+        }
+    }
+
+    public void pagaRecibo(int recibo, Cuenta cuenta) throws Exception
+    {
+        int saldo;
+
+        //Comprobamos siempre que exista la cuenta
+        if(this.arrayCuentas.contains(cuenta) && cuenta.getSaldo() >= 0)
+        {
+            //Restamos el recibo del saldo de la cuenta
+            saldo = cuenta.getSaldo() - recibo;
+
+            //Establecemos nuevo valor a la cuenta
+            cuenta.setSaldo(saldo);
+        }
+        else
+        {
+            setMoroso(true);
         }
     }
 }
